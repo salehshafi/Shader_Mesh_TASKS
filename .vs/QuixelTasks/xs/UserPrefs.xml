@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{4ADA8CD8-6668-ABA4-B0BA-C7CBD4494634}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Task3/Scripts/MeshCut.cs">
+    <Files>
+      <File FileName="Assets/Task3/Scripts/MeshCutter.cs" Line="29" Column="1" />
+      <File FileName="Assets/Task3/Scripts/MeshCut.cs" Line="370" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
