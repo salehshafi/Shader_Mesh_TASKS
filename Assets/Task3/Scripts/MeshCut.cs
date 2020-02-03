@@ -66,7 +66,7 @@ public class MeshCut
         victim_transform = victim.transform;
 
         // Creating Plane To Split Sphere
-        blade = new Plane(victim.transform.InverseTransformDirection(-normalDirection),
+        blade = new Plane(victim.transform.InverseTransformDirection(normalDirection),
                           victim.transform.InverseTransformPoint(anchorPoint));
 
         victim_mesh = victim.GetComponent<MeshFilter>().mesh;
@@ -170,7 +170,7 @@ public class MeshCut
             GameObject leftSideObj = victim;
             GameObject rightSideObj = new GameObject("rightSide", typeof(MeshFilter), typeof(MeshRenderer));
             // Adding Offset to position, so cut is visible
-            rightSideObj.transform.position = victim_transform.position + (normalDirection * 0.25f);
+            rightSideObj.transform.position = victim_transform.position + (normalDirection * -0.25f);
             rightSideObj.transform.rotation = victim_transform.rotation;
             rightSideObj.GetComponent<MeshFilter>().mesh = right_HalfMesh;
 
@@ -211,7 +211,7 @@ public class MeshCut
                     left_normal2 = left_normal1;
 
                 }
-                else //On Right Side of Plane
+                else
                 {
 
                     leftPoint2 = victim_mesh.vertices[p];
@@ -220,7 +220,7 @@ public class MeshCut
 
                 }
             }
-            else
+            else  //On Right Side of Plane
             {
                 if (rightPoint1 == Vector3.zero)
                 {
@@ -498,7 +498,7 @@ public class MeshCut
                 for (int k = 0; k < createdVertexPoints.Count; k += 2)
                 { // go through the pairs
 
-                    // for-all-created verteces, if is 2nd of capPolys and its pair (for-all-created not in capTracker)
+                    // for-all-created verteces, if is 2nd of capPolys and its pair  //(for-all-created not in capTracker)
                     if (createdVertexPoints[k] == capVertpolygon[capVertpolygon.Count - 1] && !capVertpolygon.Contains(createdVertexPoints[k + 1]))
                     { // if so add the other
 

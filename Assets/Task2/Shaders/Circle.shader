@@ -30,7 +30,7 @@
             int dist = (int)distance(center, IN.worldPos);          // Distance of Current Pixel
 
             // Using Bitwise operators to check pixel lies between radius and radius+linewidth
-            o.Albedo = _Color * (  ((((_Radius) + (~dist + 1)) >> 31) & 1)     &&    (!((((_Radius + _LineWidth) + (~dist + 1)) >> 31) & 1)));
+            o.Albedo = _Color * (  (((_Radius) + (~dist + 1)) >> 31)    &&    (!(((_Radius + _LineWidth) + (~dist + 1)) >> 31) ));
             o.Alpha = 1;
         }
         ENDCG
