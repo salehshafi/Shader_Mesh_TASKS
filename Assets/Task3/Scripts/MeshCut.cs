@@ -12,16 +12,16 @@ public class MeshCut
     private static bool[] sides = new bool[3];
 
     // Gathering values
-    private static List<int>[] left_Gather_subIndices = new List<int>[] { new List<int>(), new List<int>() };
-    private static List<int>[] right_Gather_subIndices = new List<int>[] { new List<int>(), new List<int>() };
+    private static List<int> left_Gather_subIndices = new List<int> ();
+    private static List<int> right_Gather_subIndices = new List<int>();
 
-    private static List<Vector3>[] left_Gather_added_Points = new List<Vector3>[] { new List<Vector3>(), new List<Vector3>() };
-    private static List<Vector2>[] left_Gather_added_uvs = new List<Vector2>[] { new List<Vector2>(), new List<Vector2>() };
-    private static List<Vector3>[] left_Gather_added_normals = new List<Vector3>[] { new List<Vector3>(), new List<Vector3>() };
+    private static List<Vector3> left_Gather_added_Points = new List<Vector3> ();
+        private static List<Vector2> left_Gather_added_uvs = new List<Vector2>() ;
+    private static List<Vector3> left_Gather_added_normals = new List<Vector3> ();
 
-    private static List<Vector3>[] right_Gather_added_Points = new List<Vector3>[] { new List<Vector3>(), new List<Vector3>() };
-    private static List<Vector2>[] right_Gather_added_uvs = new List<Vector2>[] { new List<Vector2>(), new List<Vector2>() };
-    private static List<Vector3>[] right_Gather_added_normals = new List<Vector3>[] { new List<Vector3>(), new List<Vector3>() };
+    private static List<Vector3> right_Gather_added_Points = new List<Vector3>() ;
+    private static List<Vector2> right_Gather_added_uvs = new List<Vector2> ();
+    private static List<Vector3> right_Gather_added_normals = new List<Vector3> ();
 
 
 
@@ -43,13 +43,13 @@ public class MeshCut
 
 
     // final arrays
-    private static List<int>[] left_Final_subIndices = new List<int>[] { new List<int>(), new List<int>() };
+    private static List<int> left_Final_subIndices = new List<int> ();
 
     private static List<Vector3> left_Final_vertices = new List<Vector3>();
     private static List<Vector3> left_Final_normals = new List<Vector3>();
     private static List<Vector2> left_Final_uvs = new List<Vector2>();
 
-    private static List<int>[] right_Final_subIndices = new List<int>[] { new List<int>(), new List<int>() };
+    private static List<int> right_Final_subIndices = new List<int>() ;
 
     private static List<Vector3> right_Final_vertices = new List<Vector3>();
     private static List<Vector3> right_Final_normals = new List<Vector3>();
@@ -82,15 +82,11 @@ public class MeshCut
 
         sides = new bool[3];
 
-        int sub = 0;
         int[] indices = victim_mesh.triangles;
-        int[] secondIndices = victim_mesh.GetIndices(1);
-
 
         // Loop to iterate through triangles of mesh
         for (int i = 0; i < indices.Length; i += 3)
         {
-
             p1 = indices[i];
             p2 = indices[i + 1];
             p3 = indices[i + 2];
@@ -102,34 +98,23 @@ public class MeshCut
 
 
 
-            // finding Same vertex in submesh
-            sub = 0;
-            for (int k = 0; k < secondIndices.Length; k++)
-            {
-                if (secondIndices[k] == p1)
-                {
-                    sub = 1;
-                    break;
-                }
-            }
-
             //  If triangle is on either side of plane
             if (sides[0] == sides[1] && sides[0] == sides[2])
             {
                 // Triangle on negative side of plane
                 if (sides[0])
                 { // left side
-                    left_Gather_subIndices[sub].Add(p1);
-                    left_Gather_subIndices[sub].Add(p2);
-                    left_Gather_subIndices[sub].Add(p3);
+                    left_Gather_subIndices.Add(p1);
+                    left_Gather_subIndices.Add(p2);
+                    left_Gather_subIndices.Add(p3);
 
                 }
                 // Triangle on positive side of plane
                 else
                 {
-                    right_Gather_subIndices[sub].Add(p1);
-                    right_Gather_subIndices[sub].Add(p2);
-                    right_Gather_subIndices[sub].Add(p3);
+                    right_Gather_subIndices.Add(p1);
+                    right_Gather_subIndices.Add(p2);
+                    right_Gather_subIndices.Add(p3);
 
                 }
 
@@ -139,7 +124,7 @@ public class MeshCut
             { // cut face
                 ResetFaceCuttingTemps();
                 int[] indeces = { p1, p2, p3 };
-                Cut_this_Face(sub, indeces);
+                Cut_this_Face(indeces);
             }
         }
 
@@ -156,8 +141,8 @@ public class MeshCut
         left_HalfMesh.vertices = left_Final_vertices.ToArray();
 
         left_HalfMesh.subMeshCount = 2;
-        left_HalfMesh.SetIndices(left_Final_subIndices[0].ToArray(), MeshTopology.Triangles, 0);
-        left_HalfMesh.SetIndices(left_Final_subIndices[1].ToArray(), MeshTopology.Triangles, 1);
+        left_HalfMesh.SetIndices(left_Final_subIndices.ToArray(), MeshTopology.Triangles, 0);
+        left_HalfMesh.SetIndices(left_Final_subIndices.ToArray(), MeshTopology.Triangles, 1);
 
         left_HalfMesh.normals = left_Final_normals.ToArray();
         left_HalfMesh.uv = left_Final_uvs.ToArray();
@@ -168,8 +153,8 @@ public class MeshCut
         right_HalfMesh.vertices = right_Final_vertices.ToArray();
 
         right_HalfMesh.subMeshCount = 2;
-        right_HalfMesh.SetIndices(right_Final_subIndices[0].ToArray(), MeshTopology.Triangles, 0);
-        right_HalfMesh.SetIndices(right_Final_subIndices[1].ToArray(), MeshTopology.Triangles, 1);
+        right_HalfMesh.SetIndices(right_Final_subIndices.ToArray(), MeshTopology.Triangles, 0);
+        right_HalfMesh.SetIndices(right_Final_subIndices.ToArray(), MeshTopology.Triangles, 1);
 
         right_HalfMesh.normals = right_Final_normals.ToArray();
         right_HalfMesh.uv = right_Final_uvs.ToArray();
@@ -205,7 +190,7 @@ public class MeshCut
 
 #region TrianglesCutAndAdd
 
-    static void Cut_this_Face(int submesh, int[] indeces)// int index1, int index2, int index3)
+    static void Cut_this_Face(int[] indeces)
     {
 
         int p = indeces[0];
@@ -265,53 +250,54 @@ public class MeshCut
         blade.Raycast(new Ray(leftPoint1, (rightPoint1 - leftPoint1).normalized), out distance);
 
         normalizedDistance = distance / (rightPoint1 - leftPoint1).magnitude;
-        Vector3 newVertex1 = Vector3.Lerp(leftPoint1, rightPoint1, normalizedDistance);
-        Vector2 newUv1 = Vector2.Lerp(left_uv1, right_uv1, normalizedDistance);
-        Vector3 newNormal1 = Vector3.Lerp(left_normal1, right_normal1, normalizedDistance);
+        Vector3 newVertex1 = leftPoint1 + (rightPoint1-leftPoint1)*normalizedDistance;//Vector3.Lerp(leftPoint1, rightPoint1, normalizedDistance);
+        Vector2 newUv1 = left_uv1 + (right_uv1-left_uv1)*normalizedDistance;//Vector2.Lerp(left_uv1, right_uv1, normalizedDistance);
+        Vector3 newNormal1 = left_normal1+ (right_normal1-left_normal1)*normalizedDistance;//Vector3.Lerp(left_normal1, right_normal1, normalizedDistance);
 
         createdVertexPoints.Add(newVertex1);
 
         blade.Raycast(new Ray(leftPoint2, (rightPoint2 - leftPoint2).normalized), out distance);
 
         normalizedDistance = distance / (rightPoint2 - leftPoint2).magnitude;
-        Vector3 newVertex2 = Vector3.Lerp(leftPoint2, rightPoint2, normalizedDistance);
-        Vector2 newUv2 = Vector2.Lerp(left_uv2, right_uv2, normalizedDistance);
-        Vector3 newNormal2 = Vector3.Lerp(left_normal2, right_normal2, normalizedDistance);
+        Vector3 newVertex2 = leftPoint2+ (rightPoint2 - leftPoint2) * normalizedDistance;//Vector3.Lerp(leftPoint1, rightPoint1, normalizedDistance);
+        Vector2 newUv2 = left_uv2+(right_uv2 - left_uv2) * normalizedDistance;//Vector2.Lerp(left_uv1, right_uv1, normalizedDistance);
+        Vector3 newNormal2 = left_normal2+(right_normal2 - left_normal2) * normalizedDistance;//Vector3.Lerp(left_normal1, right_normal1, normalizedDistance);
 
         createdVertexPoints.Add(newVertex2);
 
+
         // first triangle
-        Add_Left_triangle(submesh, newNormal1, new Vector3[] { leftPoint1, newVertex1, newVertex2 },
+        Add_Left_triangle (newNormal1, new Vector3[] { leftPoint1, newVertex1, newVertex2 },
         new Vector2[] { left_uv1, newUv1, newUv2 },
         new Vector3[] { left_normal1, newNormal1, newNormal2 });
 
         // second triangle
-        Add_Left_triangle(submesh, newNormal2, new Vector3[] { leftPoint1, leftPoint2, newVertex2 },
+        Add_Left_triangle( newNormal2, new Vector3[] { leftPoint1, leftPoint2, newVertex2 },
         new Vector2[] { left_uv1, left_uv2, newUv2 },
         new Vector3[] { left_normal1, left_normal2, newNormal2 });
 
         // first triangle
-        Add_Right_triangle(submesh, newNormal1, new Vector3[] { rightPoint1, newVertex1, newVertex2 },
+        Add_Right_triangle( newNormal1, new Vector3[] { rightPoint1, newVertex1, newVertex2 },
         new Vector2[] { right_uv1, newUv1, newUv2 },
         new Vector3[] { right_normal1, newNormal1, newNormal2 });
 
         // second triangle
-        Add_Right_triangle(submesh, newNormal2, new Vector3[] { rightPoint1, rightPoint2, newVertex2 },
+        Add_Right_triangle( newNormal2, new Vector3[] { rightPoint1, rightPoint2, newVertex2 },
         new Vector2[] { right_uv1, right_uv2, newUv2 },
         new Vector3[] { right_normal1, right_normal2, newNormal2 });
 
     }
 
-    static void Add_Left_triangle(int submesh, Vector3 faceNormal, Vector3[] points, Vector2[] uvs, Vector3[] normals)
+    static void Add_Left_triangle( Vector3 faceNormal, Vector3[] points, Vector2[] uvs, Vector3[] normals)
     {
 
         int p1 = 0;
         int p2 = 1;
         int p3 = 2;
 
-        Vector3 calculated_normal = Vector3.Cross((points[1] - points[0]).normalized, (points[2] - points[0]).normalized);
+        Vector3 calculated_normal = Vector3.Cross((points[1] - points[0]).normalized, (points[2] - points[0]).normalized); 
 
-        if (Vector3.Dot(calculated_normal, faceNormal) < 0)
+        if (Vector3.Dot(calculated_normal, faceNormal) < 0) //inverting triangle if face is wrong side
         {
 
             p1 = 2;
@@ -319,21 +305,21 @@ public class MeshCut
             p3 = 0;
         }
 
-        left_Gather_added_Points[submesh].Add(points[p1]);
-        left_Gather_added_Points[submesh].Add(points[p2]);
-        left_Gather_added_Points[submesh].Add(points[p3]);
+        left_Gather_added_Points.Add(points[p1]);
+        left_Gather_added_Points.Add(points[p2]);
+        left_Gather_added_Points.Add(points[p3]);
 
-        left_Gather_added_uvs[submesh].Add(uvs[p1]);
-        left_Gather_added_uvs[submesh].Add(uvs[p2]);
-        left_Gather_added_uvs[submesh].Add(uvs[p3]);
+        left_Gather_added_uvs.Add(uvs[p1]);
+        left_Gather_added_uvs.Add(uvs[p2]);
+        left_Gather_added_uvs.Add(uvs[p3]);
 
-        left_Gather_added_normals[submesh].Add(normals[p1]);
-        left_Gather_added_normals[submesh].Add(normals[p2]);
-        left_Gather_added_normals[submesh].Add(normals[p3]);
+        left_Gather_added_normals.Add(normals[p1]);
+        left_Gather_added_normals.Add(normals[p2]);
+        left_Gather_added_normals.Add(normals[p3]);
 
     }
 
-    static void Add_Right_triangle(int submesh, Vector3 faceNormal, Vector3[] points, Vector2[] uvs, Vector3[] normals)
+    static void Add_Right_triangle(Vector3 faceNormal, Vector3[] points, Vector2[] uvs, Vector3[] normals)
     {
 
 
@@ -352,17 +338,17 @@ public class MeshCut
         }
 
 
-        right_Gather_added_Points[submesh].Add(points[p1]);
-        right_Gather_added_Points[submesh].Add(points[p2]);
-        right_Gather_added_Points[submesh].Add(points[p3]);
+        right_Gather_added_Points.Add(points[p1]);
+        right_Gather_added_Points.Add(points[p2]);
+        right_Gather_added_Points.Add(points[p3]);
 
-        right_Gather_added_uvs[submesh].Add(uvs[p1]);
-        right_Gather_added_uvs[submesh].Add(uvs[p2]);
-        right_Gather_added_uvs[submesh].Add(uvs[p3]);
+        right_Gather_added_uvs.Add(uvs[p1]);
+        right_Gather_added_uvs.Add(uvs[p2]);
+        right_Gather_added_uvs.Add(uvs[p3]);
 
-        right_Gather_added_normals[submesh].Add(normals[p1]);
-        right_Gather_added_normals[submesh].Add(normals[p2]);
-        right_Gather_added_normals[submesh].Add(normals[p3]);
+        right_Gather_added_normals.Add(normals[p1]);
+        right_Gather_added_normals.Add(normals[p2]);
+        right_Gather_added_normals.Add(normals[p3]);
 
     }
 #endregion
@@ -371,23 +357,23 @@ public class MeshCut
     static void ResetGatheringValues()
     {
 
-        left_Gather_subIndices[0].Clear();
-        left_Gather_subIndices[1].Clear();
-        left_Gather_added_Points[0].Clear();
-        left_Gather_added_Points[1].Clear();
-        left_Gather_added_uvs[0].Clear();
-        left_Gather_added_uvs[1].Clear();
-        left_Gather_added_normals[0].Clear();
-        left_Gather_added_normals[1].Clear();
+        left_Gather_subIndices.Clear();
+        left_Gather_subIndices.Clear();
+        left_Gather_added_Points.Clear();
+        left_Gather_added_Points.Clear();
+        left_Gather_added_uvs.Clear();
+        left_Gather_added_uvs.Clear();
+        left_Gather_added_normals.Clear();
+        left_Gather_added_normals.Clear();
 
-        right_Gather_subIndices[0].Clear();
-        right_Gather_subIndices[1].Clear();
-        right_Gather_added_Points[0].Clear();
-        right_Gather_added_Points[1].Clear();
-        right_Gather_added_uvs[0].Clear();
-        right_Gather_added_uvs[1].Clear();
-        right_Gather_added_normals[0].Clear();
-        right_Gather_added_normals[1].Clear();
+        right_Gather_subIndices.Clear();
+        right_Gather_subIndices.Clear();
+        right_Gather_added_Points.Clear();
+        right_Gather_added_Points.Clear();
+        right_Gather_added_uvs.Clear();
+        right_Gather_added_uvs.Clear();
+        right_Gather_added_normals.Clear();
+        right_Gather_added_normals.Clear();
 
         createdVertexPoints.Clear();
 
@@ -415,14 +401,14 @@ public class MeshCut
     static void ResetFinalArrays()
     {
 
-        left_Final_subIndices[0].Clear();
-        left_Final_subIndices[1].Clear();
+        left_Final_subIndices.Clear();
+        left_Final_subIndices.Clear();
         left_Final_vertices.Clear();
         left_Final_normals.Clear();
         left_Final_uvs.Clear();
 
-        right_Final_subIndices[0].Clear();
-        right_Final_subIndices[1].Clear();
+        right_Final_subIndices.Clear();
+        right_Final_subIndices.Clear();
         right_Final_vertices.Clear();
         right_Final_normals.Clear();
         right_Final_uvs.Clear();
@@ -433,129 +419,110 @@ public class MeshCut
     #region FinalArrays
     static void SetFinalArrays_withOriginals()
     {
-
-        int p = 0;
-
-        for (int submesh = 0; submesh < 2; submesh++)
-        {
-
-            for (int i = 0; i < left_Gather_subIndices[submesh].Count; i++)
+           int p = 0;
+           for (int i = 0; i < left_Gather_subIndices.Count; i++)
             {
 
-                p = left_Gather_subIndices[submesh][i];
+                p = left_Gather_subIndices[i];
 
                 left_Final_vertices.Add(victim_mesh.vertices[p]);
-                left_Final_subIndices[submesh].Add(left_Final_vertices.Count - 1);
+                left_Final_subIndices.Add(i);
                 left_Final_normals.Add(victim_mesh.normals[p]);
                 left_Final_uvs.Add(victim_mesh.uv[p]);
 
             }
 
-            for (int i = 0; i < right_Gather_subIndices[submesh].Count; i++)
+            for (int i = 0; i < right_Gather_subIndices.Count; i++)
             {
 
-                p = right_Gather_subIndices[submesh][i];
+                p = right_Gather_subIndices[i];
 
                 right_Final_vertices.Add(victim_mesh.vertices[p]);
-                right_Final_subIndices[submesh].Add(right_Final_vertices.Count - 1);
+                right_Final_subIndices.Add(i);
                 right_Final_normals.Add(victim_mesh.normals[p]);
                 right_Final_uvs.Add(victim_mesh.uv[p]);
 
             }
-
-        }
 
     }
 
     static void AddNewTriangles_toFinalArrays()
     {
 
-        for (int submesh = 0; submesh < 2; submesh++)
-        {
-
             int count = left_Final_vertices.Count;
             // add the new ones
-            for (int i = 0; i < left_Gather_added_Points[submesh].Count; i++)
+            for (int i = 0; i < left_Gather_added_Points.Count; i++)
             {
 
-                left_Final_vertices.Add(left_Gather_added_Points[submesh][i]);
-                left_Final_subIndices[submesh].Add(i + count);
-                left_Final_uvs.Add(left_Gather_added_uvs[submesh][i]);
-                left_Final_normals.Add(left_Gather_added_normals[submesh][i]);
+                left_Final_vertices.Add(left_Gather_added_Points[i]);
+                left_Final_subIndices.Add(i + count);
+                left_Final_uvs.Add(left_Gather_added_uvs[i]);
+                left_Final_normals.Add(left_Gather_added_normals[i]);
 
             }
 
             count = right_Final_vertices.Count;
 
-            for (int i = 0; i < right_Gather_added_Points[submesh].Count; i++)
+            for (int i = 0; i < right_Gather_added_Points.Count; i++)
             {
 
-                right_Final_vertices.Add(right_Gather_added_Points[submesh][i]);
-                right_Final_subIndices[submesh].Add(i + count);
-                right_Final_uvs.Add(right_Gather_added_uvs[submesh][i]);
-                right_Final_normals.Add(right_Gather_added_normals[submesh][i]);
+                right_Final_vertices.Add(right_Gather_added_Points[i]);
+                right_Final_subIndices.Add(i + count);
+                right_Final_uvs.Add(right_Gather_added_uvs[i]);
+                right_Final_normals.Add(right_Gather_added_normals[i]);
 
             }
-        }
+      
 
     }
     #endregion
 
     #region CapStuff
-    private static List<Vector3> capVertTracker = new List<Vector3>();
     private static List<Vector3> capVertpolygon = new List<Vector3>();
 
     static void MakeCaps()
     {
+        
+        capVertpolygon.Clear();
 
-        capVertTracker.Clear();
+        if (createdVertexPoints.Count > 1)
+        {
+            capVertpolygon.Add(createdVertexPoints[0]);
+            capVertpolygon.Add(createdVertexPoints[1]);
 
-        for (int i = 0; i < createdVertexPoints.Count; i++)
-            if (!capVertTracker.Contains(createdVertexPoints[i]))
+            bool isDone = false;
+            while (!isDone)
             {
-                capVertpolygon.Clear();
-                capVertpolygon.Add(createdVertexPoints[i]);
-                capVertpolygon.Add(createdVertexPoints[i + 1]);
+                isDone = true;
 
-                capVertTracker.Add(createdVertexPoints[i]);
-                capVertTracker.Add(createdVertexPoints[i + 1]);
+                for (int k = 0; k < createdVertexPoints.Count; k += 2)
+                { // go through the pairs
 
+                    // for-all-created verteces, if is 2nd of capPolys and its pair (for-all-created not in capTracker)
+                    if (createdVertexPoints[k] == capVertpolygon[capVertpolygon.Count - 1] && !capVertpolygon.Contains(createdVertexPoints[k + 1]))
+                    { // if so add the other
 
-                bool isDone = false;
-                while (!isDone)
-                {
-                    isDone = true;
+                        isDone = false;
+                        capVertpolygon.Add(createdVertexPoints[k + 1]);
 
-                    for (int k = 0; k < createdVertexPoints.Count; k += 2)
-                    { // go through the pairs
+                    }
+                    else if (createdVertexPoints[k + 1] == capVertpolygon[capVertpolygon.Count - 1] && !capVertpolygon .Contains(createdVertexPoints[k]))
+                    {// if so add the other
 
-                        if (createdVertexPoints[k] == capVertpolygon[capVertpolygon.Count - 1] && !capVertTracker.Contains(createdVertexPoints[k + 1]))
-                        { // if so add the other
-
-                            isDone = false;
-                            capVertpolygon.Add(createdVertexPoints[k + 1]);
-                            capVertTracker.Add(createdVertexPoints[k + 1]);
-
-                        }
-                        else if (createdVertexPoints[k + 1] == capVertpolygon[capVertpolygon.Count - 1] && !capVertTracker.Contains(createdVertexPoints[k]))
-                        {// if so add the other
-
-                            isDone = false;
-                            capVertpolygon.Add(createdVertexPoints[k]);
-                            capVertTracker.Add(createdVertexPoints[k]);
-                        }
+                        isDone = false;
+                        capVertpolygon.Add(createdVertexPoints[k]);
                     }
                 }
-
-                FillCap(capVertpolygon);
-
             }
+            Debug.Log("COUNNT:" + capVertpolygon.Count);
+            FillCap(capVertpolygon);
+
+        }
 
     }
 
     static void FillCap(List<Vector3> vertices)
     {
-
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
         List<Vector3> normals = new List<Vector3>();
@@ -584,7 +551,7 @@ public class MeshCut
             relativePosition = Vector3.zero;
             relativePosition.x = 0.5f + Vector3.Dot(displacement, left);
             relativePosition.y = 0.5f + Vector3.Dot(displacement, upward);
-            relativePosition.z = 0.5f + Vector3.Dot(displacement, blade.normal);
+            //relativePosition.z = 0.5f + Vector3.Dot(displacement, blade.normal);
 
             uvs.Add(new Vector2(relativePosition.x, relativePosition.y));
             normals.Add(blade.normal);
@@ -628,17 +595,19 @@ public class MeshCut
 
             index = triangles[i];
             right_Final_vertices.Add(vertices[index]);
-            right_Final_subIndices[1].Add(right_Final_vertices.Count - 1);
+            right_Final_subIndices.Add(right_Final_vertices.Count - 1);
             right_Final_normals.Add(normals[index]);
             right_Final_uvs.Add(uvs[index]);
 
         }
 
+        //flipping normals for 2nd mesh
         for (int i = 0; i < normals.Count; i++)
         {
             normals[i] = -normals[i];
         }
 
+        //flipping triangles for 2nd mesh
         int temp1, temp2;
         for (int i = 0; i < triangles.Count; i += 3)
         {
@@ -655,7 +624,7 @@ public class MeshCut
 
             index = triangles[i];
             left_Final_vertices.Add(vertices[index]);
-            left_Final_subIndices[1].Add(left_Final_vertices.Count - 1);
+            left_Final_subIndices.Add(left_Final_vertices.Count - 1);
             left_Final_normals.Add(normals[index]);
             left_Final_uvs.Add(uvs[index]);
 
